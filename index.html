@@ -101,6 +101,33 @@
       line-height: 1.6;
       color: var(--volcanic-rock);
     }
+
+    /* 🦕 Fossil Buddy Animation Styles */
+    .fossil-buddy {
+      margin-top: 1.5rem;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .fossil-buddy img {
+      width: 160px;
+      height: auto;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: scale(0.9);
+      animation: popIn 0.8s ease forwards 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -111,27 +138,30 @@
   </div>
 
   <div class="quiz-container hidden" id="quiz">
-    <div class="progress" id="progress">Question 1 / 7</div>
-    <div class="question" id="question-text"></div>
+    <div class="progress" id="progress" aria-live="polite">Question 1 / 7</div>
+    <div class="question" id="question-text" aria-live="polite"></div>
     <div class="options" id="options"></div>
   </div>
 
   <div class="quiz-container hidden" id="result-screen">
-    <h1>Financal Literacy:</h1>
+    <h1>Financial Literacy:</h1>
     <div id="result" class="result-box"></div>
+    <div id="fossil-buddy" class="fossil-buddy hidden">
+      <img id="fossil-img" src="" alt="Your fossil buddy" />
+      <p id="buddy-name"></p>
+    </div>
     <button onclick="restartQuiz()">Restart</button>
   </div>
 
   <script>
     const quizData = [
       { question: "Where does the largest share of your money go most months?", options: ["Tuition/academic fees", "Rent/housing", "Food", "Extras (subscriptions/shopping/social/transport)"], values: ["blue", "red", "green", "purple"] },
-      { question: "In your priciest category (excluding tuition), how much do you typically spend per month?", options: ["Less than $150", "$150–$299", " $300–$599", "$600 or more"], values: ["pink", "green", "grey", "purple"] },
+      { question: "In your priciest category (excluding tuition), how much do you typically spend per month?", options: ["Less than $150", "$150–$299", "$300–$599", "$600 or more"], values: ["pink", "green", "grey", "purple"] },
       { question: "What’s your #1 savings goal for the next 30 days?", options: ["Cut food costs", "Lower housing/utilities share", "Trim subscriptions/“extras”", "Build a small cash buffer ($100–$300)"], values: ["green", "red", "purple", "grey"] },
-      { question: "Food pattern that best describes you:", options: ["Mostly groceries/cook at home", "Mix of cooking and occasional dining out", "Eat out most days", "Frequent delivery/takeout (fees/tips add up)
-"], values: ["blue", "grey", "pink", "red"] },
+      { question: "Food pattern that best describes you:", options: ["Mostly groceries/cook at home", "Mix of cooking and occasional dining out", "Eat out most days", "Frequent delivery/takeout (fees/tips add up)"], values: ["blue", "grey", "pink", "red"] },
       { question: "Housing situation (for personalization):", options: ["Dorm or shared place (2+ roommates)", "Shared place (1 roommate)", "Solo studio/1BR", "With family/commuting"], values: ["blue", "green", "red", "pink"] },
       { question: "Common trigger for overspending in your top category:", options: ["Stress/convenience (no time to plan)", "Social plans/FOMO", "Ads/sales/scrolling", "Irregular schedule/poor planning"], values: ["pink", "blue", "red", "purple"] },
-      { question: "Preferred saving tactic you’d actually try this month:", options: [" Set a weekly cap for that category", "Change habit (e.g., cook 3 dinners; walk/transit twice)", "Pause/cancel 2 subscriptions for 30 days", "Auto-move $25–$50/week to savings before spending"], values: ["blue", "pink", "purple", "grey"] }
+      { question: "Preferred saving tactic you’d actually try this month:", options: ["Set a weekly cap for that category", "Change habit (e.g., cook 3 dinners; walk/transit twice)", "Pause/cancel 2 subscriptions for 30 days", "Auto-move $25–$50/week to savings before spending"], values: ["blue", "pink", "purple", "grey"] }
     ];
 
     const results = {
@@ -143,12 +173,22 @@
       grey: "<strong>Volcanic Rock</strong>: Wise, composed, and steady — you’re the anchor in the island’s storms."
     };
 
+    const fossilBuddies = {
+      blue:  { name: "Lagoonosaurus", img: "https://i.imgur.com/QP2WJ4U.png" },
+      green: { name: "Fernraptor", img: "https://i.imgur.com/Lz7DHOB.png" },
+      red:   { name: "Crimsonodon", img: "https://i.imgur.com/tQIF1Kq.png" },
+      purple:{ name: "Amethystrex", img: "https://i.imgur.com/XOimN7E.png" },
+      pink:  { name: "Coralceratops", img: "https://i.imgur.com/4vdAh3T.png" },
+      grey:  { name: "Volcanodon", img: "https://i.imgur.com/T4cYg1b.png" }
+    };
+
     let current = 0;
     const tally = { blue: 0, green: 0, red: 0, purple: 0, pink: 0, grey: 0 };
 
     function startQuiz() {
       document.getElementById("intro").classList.add("hidden");
       document.getElementById("quiz").classList.remove("hidden");
+      current = 0;
       showQuestion();
     }
 
@@ -170,26 +210,33 @@
     function selectAnswer(value) {
       tally[value]++;
       current++;
-      if (current < quizData.length) {
-        showQuestion();
-      } else {
-        showResult();
-      }
+      setTimeout(() => {
+        if (current < quizData.length) showQuestion();
+        else showResult();
+      }, 250); // short delay for UX
     }
 
     function showResult() {
       document.getElementById("quiz").classList.add("hidden");
       document.getElementById("result-screen").classList.remove("hidden");
+
       let top = null, topScore = -1;
       for (const [color, score] of Object.entries(tally)) {
         if (score > topScore) { top = color; topScore = score; }
       }
+
       document.getElementById("result").innerHTML = results[top];
+      const buddy = fossilBuddies[top];
+      document.getElementById("fossil-img").src = buddy.img;
+      document.getElementById("buddy-name").textContent = `Your fossil buddy: ${buddy.name}! 🦕`;
+      document.getElementById("fossil-buddy").classList.remove("hidden");
     }
 
     function restartQuiz() {
       current = 0;
       for (const k in tally) tally[k] = 0;
+      document.getElementById("progress").innerText = "";
+      document.getElementById("fossil-buddy").classList.add("hidden");
       document.getElementById("result-screen").classList.add("hidden");
       document.getElementById("intro").classList.remove("hidden");
     }
