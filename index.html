@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Personality Quiz</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff, #fef6ff);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-container {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .hidden { display: none; }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .options {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .option {
+      background: #f4f4f4;
+      border: none;
+      border-radius: 0.8rem;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 1rem;
+      color: #000;
+    }
+
+    .option:hover {
+      background: #e0e0ff;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.8rem;
+      background: #6b5bff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #5848d6;
+    }
+
+    .progress {
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .result-box {
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container" id="intro">
+    <h1>Discover Your Color Personality</h1>
+    <p>Answer 7 quick questions to find out which color best matches your personality.</p>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div class="quiz-container hidden" id="quiz">
+    <div class="progress" id="progress">Question 1 / 7</div>
+    <div class="question" id="question-text"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <div class="quiz-container hidden" id="result-screen">
+    <h1>Your Result:</h1>
+    <div id="result" class="result-box"></div>
+    <button onclick="restartQuiz()">Try Again</button>
+  </div>
+
+  <script>
+    const quizData = [
+      { question: "Which environment feels most peaceful to you?", options: ["Ocean waves", "Forest path", "City lights", "Sunset sky"], values: ["blue", "green", "grey", "orange"] },
+      { question: "Pick a favorite way to spend a weekend.", options: ["Painting or writing", "Hiking or gardening", "Hosting friends", "Relaxing with a book"], values: ["purple", "green", "orange", "blue"] },
+      { question: "How do you approach challenges?", options: ["Head-on, with energy", "Calmly and rationally", "With creativity", "With patience"], values: ["red", "grey", "purple", "pink"] },
+      { question: "Choose a word that describes you best.", options: ["Loyal", "Adventurous", "Empathetic", "Bold"], values: ["blue", "orange", "pink", "red"] },
+      { question: "Your ideal vacation spot?", options: ["Tropical beach", "Mountain cabin", "Modern city", "Flower fields"], values: ["blue", "green", "grey", "pink"] },
+      { question: "What inspires you most?", options: ["Love", "Nature", "Ambition", "Mystery"], values: ["pink", "green", "red", "purple"] },
+      { question: "Which describes your vibe?", options: ["Calm & reliable", "Playful & bright", "Creative & dreamy", "Strong & steady"], values: ["blue", "orange", "purple", "grey"] }
+    ];
+
+    const results = {
+      blue: "<strong>Blue</strong>: Calm, trustworthy, and introspective. You bring serenity wherever you go.",
+      green: "<strong>Green</strong>: Grounded, balanced, and nurturing. You find harmony in the world around you.",
+      red: "<strong>Red</strong>: Passionate, confident, and bold. You light up any room you enter.",
+      orange: "<strong>Orange</strong>: Energetic, warm, and outgoing. You live life to the fullest.",
+      purple: "<strong>Purple</strong>: Creative, intuitive, and mysterious. You see beauty in everything.",
+      pink: "<strong>Pink</strong>: Gentle, compassionate, and kind-hearted. You lead with love.",
+      grey: "<strong>Grey</strong>: Wise, composed, and dependable. You bring calm to chaos."
+    };
+
+    let current = 0;
+    const tally = { blue: 0, green: 0, red: 0, orange: 0, purple: 0, pink: 0, grey: 0 };
+
+    function startQuiz() {
+      document.getElementById("intro").classList.add("hidden");
+      document.getElementById("quiz").classList.remove("hidden");
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizData[current];
+      document.getElementById("question-text").innerText = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(q.values[i]);
+        optionsDiv.appendChild(btn);
+      });
+      document.getElementById("progress").innerText = `Question ${current + 1} / ${quizData.length}`;
+    }
+
+    function selectAnswer(value) {
+      tally[value]++;
+      current++;
+      if (current < quizData.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("quiz").classList.add("hidden");
+      document.getElementById("result-screen").classList.remove("hidden");
+      let top = null, topScore = -1;
+      for (const [color, score] of Object.entries(tally)) {
+        if (score > topScore) { top = color; topScore = score; }
+      }
+      document.getElementById("result").innerHTML = results[top];
+    }
+
+    function restartQuiz() {
+      current = 0;
+      for (const k in tally) tally[k] = 0;
+      document.getElementById("result-screen").classList.add("hidden");
+      document.getElementById("intro").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
