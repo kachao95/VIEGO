@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jurassic Isle Quiz</title>
+  <title>Finance-asaurus 101 Quiz</title>
   <style>
     :root {
       --dino-fern: #4CAF50;
@@ -105,9 +105,9 @@
 </head>
 <body>
   <div class="quiz-container" id="intro">
-    <h1>🌴 Discover Your Jurassic Isle Vibe 🦖</h1>
-    <p>Take 7 quick questions to find your prehistoric island color personality.</p>
-    <button onclick="startQuiz()">Start Quiz</button>
+    <h1>🌴 Finance-asaurus 101 Quiz 🦖</h1>
+    <p>Take 7 quick questions to obtain a fossil buddy!</p>
+    <button onclick="startQuiz()">Begin Quiz</button>
   </div>
 
   <div class="quiz-container hidden" id="quiz">
@@ -117,34 +117,34 @@
   </div>
 
   <div class="quiz-container hidden" id="result-screen">
-    <h1>Your Color Vibe:</h1>
+    <h1>Financal Literacy:</h1>
     <div id="result" class="result-box"></div>
     <button onclick="restartQuiz()">Restart</button>
   </div>
 
   <script>
     const quizData = [
-      { question: "Which environment feels most peaceful to you?", options: ["Ocean waves", "Forest path", "City lights", "Sunset sky"], values: ["blue", "green", "grey", "orange"] },
-      { question: "Pick a favorite way to spend a weekend.", options: ["Painting or writing", "Hiking or gardening", "Hosting friends", "Relaxing with a book"], values: ["purple", "green", "orange", "blue"] },
-      { question: "How do you approach challenges?", options: ["Head-on, with energy", "Calmly and rationally", "With creativity", "With patience"], values: ["red", "grey", "purple", "pink"] },
-      { question: "Choose a word that describes you best.", options: ["Loyal", "Adventurous", "Empathetic", "Bold"], values: ["blue", "orange", "pink", "red"] },
-      { question: "Your ideal vacation spot?", options: ["Tropical beach", "Mountain cabin", "Modern city", "Flower fields"], values: ["blue", "green", "grey", "pink"] },
-      { question: "What inspires you most?", options: ["Love", "Nature", "Ambition", "Mystery"], values: ["pink", "green", "red", "purple"] },
-      { question: "Which describes your vibe?", options: ["Calm & reliable", "Playful & bright", "Creative & dreamy", "Strong & steady"], values: ["blue", "orange", "purple", "grey"] }
+      { question: "Where does the largest share of your money go most months?", options: ["Tuition/academic fees", "Rent/housing", "Food", "Extras (subscriptions/shopping/social/transport)"], values: ["blue", "red", "green", "purple"] },
+      { question: "In your priciest category (excluding tuition), how much do you typically spend per month?", options: ["Less than $150", "$150–$299", " $300–$599", "$600 or more"], values: ["pink", "green", "grey", "purple"] },
+      { question: "What’s your #1 savings goal for the next 30 days?", options: ["Cut food costs", "Lower housing/utilities share", "Trim subscriptions/“extras”", "Build a small cash buffer ($100–$300)"], values: ["green", "red", "purple", "grey"] },
+      { question: "Food pattern that best describes you:", options: ["Mostly groceries/cook at home", "Mix of cooking and occasional dining out", "Eat out most days", "Frequent delivery/takeout (fees/tips add up)
+"], values: ["blue", "grey", "pink", "red"] },
+      { question: "Housing situation (for personalization):", options: ["Dorm or shared place (2+ roommates)", "Shared place (1 roommate)", "Solo studio/1BR", "With family/commuting"], values: ["blue", "green", "red", "pink"] },
+      { question: "Common trigger for overspending in your top category:", options: ["Stress/convenience (no time to plan)", "Social plans/FOMO", "Ads/sales/scrolling", "Irregular schedule/poor planning"], values: ["pink", "blue", "red", "purple"] },
+      { question: "Preferred saving tactic you’d actually try this month:", options: [" Set a weekly cap for that category", "Change habit (e.g., cook 3 dinners; walk/transit twice)", "Pause/cancel 2 subscriptions for 30 days", "Auto-move $25–$50/week to savings before spending"], values: ["blue", "pink", "purple", "grey"] }
     ];
 
     const results = {
       blue: "<strong>Lagoon Blue</strong>: Calm, trustworthy, and introspective — you bring serenity wherever you go.",
       green: "<strong>Dino Fern</strong>: Grounded, balanced, and nurturing — you thrive among the trees and ocean air.",
       red: "<strong>Crimson Flame</strong>: Passionate, bold, and full of life — your energy sets the island alight.",
-      orange: "<strong>Sunset Ember</strong>: Warm, radiant, and social — you’re the life of every prehistoric beach party.",
       purple: "<strong>Amethyst Cloud</strong>: Creative, dreamy, and mysterious — you see magic in every shell and stone.",
       pink: "<strong>Coral Glow</strong>: Gentle and kind-hearted — you bring warmth to those around you.",
       grey: "<strong>Volcanic Rock</strong>: Wise, composed, and steady — you’re the anchor in the island’s storms."
     };
 
     let current = 0;
-    const tally = { blue: 0, green: 0, red: 0, orange: 0, purple: 0, pink: 0, grey: 0 };
+    const tally = { blue: 0, green: 0, red: 0, purple: 0, pink: 0, grey: 0 };
 
     function startQuiz() {
       document.getElementById("intro").classList.add("hidden");
