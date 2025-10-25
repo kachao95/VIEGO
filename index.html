@@ -134,7 +134,7 @@
   <div class="quiz-container" id="intro">
     <h1>🌴 Finance-asaurus 101 Quiz 🦖</h1>
     <p>Take 7 quick questions to obtain a fossil buddy!</p>
-    <button onclick="startQuiz()">Begin Quiz</button>
+    <button onclick="beginQuiz()">Begin Quiz</button>
   </div>
 
   <div class="quiz-container hidden" id="quiz">
@@ -174,18 +174,18 @@
     };
 
     const fossilBuddies = {
-      blue:  { name: "Lagoonosaurus", img: "https://i.imgur.com/QP2WJ4U.png" },
-      green: { name: "Fernraptor", img: "https://i.imgur.com/Lz7DHOB.png" },
-      red:   { name: "Crimsonodon", img: "https://i.imgur.com/tQIF1Kq.png" },
-      purple:{ name: "Amethystrex", img: "https://i.imgur.com/XOimN7E.png" },
-      pink:  { name: "Coralceratops", img: "https://i.imgur.com/4vdAh3T.png" },
-      grey:  { name: "Volcanodon", img: "https://i.imgur.com/T4cYg1b.png" }
+      blue:  { name: "Lapisaur", img: "https://i.imgur.com/QP2WJ4U.png" },
+      green: { name: "Midoriex", img: "https://i.imgur.com/Lz7DHOB.png" },
+      red:   { name: "Vermilidex", img: "https://i.imgur.com/tQIF1Kq.png" },
+      purple:{ name: "Amystego", img: "https://i.imgur.com/XOimN7E.png" },
+      pink:  { name: "Magentops", img: "https://i.imgur.com/4vdAh3T.png" },
+      grey:  { name: "Ankroslate", img: "https://i.imgur.com/T4cYg1b.png" }
     };
 
     let current = 0;
     const tally = { blue: 0, green: 0, red: 0, purple: 0, pink: 0, grey: 0 };
 
-    function startQuiz() {
+    function beginQuiz() {
       document.getElementById("intro").classList.add("hidden");
       document.getElementById("quiz").classList.remove("hidden");
       current = 0;
